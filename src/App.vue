@@ -1,29 +1,29 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <HelloWorld msg=""/>
-  <GetRequest />
+  <v-app>
+    <v-main>
+      <GetRequest/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import GetRequest from './components/GetRequest.vue'  
+import GetRequest from './components/GetRequest.vue'
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld,
     GetRequest
-  }
+  },
+
+  data: () => ({
+    //
+  }),
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    margin: 0 !important;
+  }
 </style>

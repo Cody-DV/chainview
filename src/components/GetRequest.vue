@@ -1,19 +1,32 @@
 <template>
-  <button @click="fetchData()">Get Data</button>
-  <div v-for="( pool, index ) in pools" :key="index">
-    <div class="grid grid-cols-3 grid-flow-cols">
-      <div class="card text-center m-3">
-        <h5 class="card-header">Pool ID {{ pool.id }}</h5>
-        <div class="card-body">
-          {{ pool.token0.symbol }} / {{ pool.token1.symbol }}
-          <ul>
-            <li>Token0 Price: {{ pool.token0Price }}</li>
-            <li>Token1 Price: {{ pool.token1Price }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-container>
+    <!-- <button @click="fetchData()">Get Data</button> -->
+    <v-card v-for="(pool, index) in pools" :key="index">
+      <v-card-title>
+        {{ pool.token0.symbol }} / {{ pool.token1.symbol }}
+      </v-card-title>
+      <v-card-subtitle>Pool ID: {{ pool.id }}</v-card-subtitle>
+      <v-card-text>
+
+        <!-- Token 0 -->
+        <h4>{{ pool.token0.name }}</h4>
+        <ul>
+          <li>Price: {{ pool.token0Price }}</li>
+          <li>Volume USD: {{ pool.token0.volumeUSD }}</li>
+          <li>ID: {{ pool.token0.id }}</li>
+        </ul>
+
+        <!-- Token 1 -->
+        <h4>{{ pool.token1.name }}</h4>
+        <ul>
+          <li>Price: {{ pool.token1Price }}</li>
+          <li>Volume USD: {{ pool.token1.volumeUSD }}</li>
+          <li>ID: {{ pool.token1.id }}</li>
+        </ul>
+
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -26,17 +39,17 @@ export default {
     };
   },
   mounted() {
-      console.log("MOUNTED")
-      this.fetchData()
+    this.fetchData();
   },
-  methods: {  
+  methods: {
     async fetchData() {
       let queryString = {
         query: `
           {
             pools (
               orderBy:totalValueLockedETH, 
-              orderDirection:desc
+              orderDirection:desc,
+              first: 10
             ) {
               id
               totalValueLockedETH
@@ -47,12 +60,14 @@ export default {
                 symbol
                 name
                 decimals
+                volumeUSD
               }
               token1 {
                 id
                 symbol
                 name
                 decimals
+                volumeUSD
               }
             }
           }
@@ -63,10 +78,17 @@ export default {
         "https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-subgraph";
       let headers = {};
 
-      const returnedData = await axios.post(url, queryString, { "headers": headers });
+      const returnedData = await axios.post(url, queryString, {
+        headers: headers,
+      });
       this.pools = returnedData.data.data.pools;
-
     },
   },
 };
 </script>
+
+<style scoped>
+.v-card {
+  margin: 3%;
+}
+</style>
